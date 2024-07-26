@@ -2,8 +2,8 @@ part of 'route_bloc.dart';
 
 @immutable
 class RouteState extends Equatable {
-  final String route;
-
+  final String? route;
+  
   const RouteState(this.route);
 
   @override
@@ -11,5 +11,5 @@ class RouteState extends Equatable {
 }
 
 final class RouteInitial extends RouteState {
-  RouteInitial() : super('/');
+  RouteInitial() : super('/splash');
 }
