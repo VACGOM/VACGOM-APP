@@ -12,7 +12,7 @@ class ChangeMonthEvent extends CalendarEvent {
 }
 
 class SelectDayEvent extends CalendarEvent {
-  final int day;
+  final DateTime date;
 
-  SelectDayEvent({required this.day});
+  SelectDayEvent({required this.date});
 }

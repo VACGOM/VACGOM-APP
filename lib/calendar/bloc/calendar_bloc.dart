@@ -11,11 +11,10 @@ part 'calendar_event.dart';
 part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
-  Future<CalendarGroup> generate(DateTime dateTime) async  {
-
+  Future<CalendarGroup> generate(DateTime dateTime) async {
     CalendarService calendarService = CalendarService();
-    Map<String, CalendarTodoItem> calendarTodoMap = await calendarService.searchTodo(
-        dateTime.year, dateTime.month);
+    Map<String, CalendarTodoItem> calendarTodoMap =
+        await calendarService.searchTodo(dateTime.year, dateTime.month);
 
     print(calendarTodoMap);
     List<List<CalendarItem>> calendarItems = [];
@@ -29,7 +28,9 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     for (int i = 0; i < prevMonthDays; i++) {
       prevMonthItems.add(CalendarItem(
           date: dateTimeIndex,
-          calendarTodoItem: CalendarTodoItem(userTodoCompletions: [], unassignedTodoCompletion: TodoCompletion())));
+          calendarTodoItem: CalendarTodoItem(
+              userTodoCompletions: [],
+              unassignedTodoCompletion: TodoCompletion())));
       dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
     }
 
@@ -37,7 +38,9 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     for (int i = 0; i < 7 - prevMonthDays; i++) {
       prevMonthItems.add(CalendarItem(
           date: dateTimeIndex,
-          calendarTodoItem: CalendarTodoItem(userTodoCompletions: [], unassignedTodoCompletion: TodoCompletion())));
+          calendarTodoItem: CalendarTodoItem(
+              userTodoCompletions: [],
+              unassignedTodoCompletion: TodoCompletion())));
       dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
     }
 
@@ -49,8 +52,11 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         print(dateTimeIndex.toIso8601String().split("T")[0]);
         weekItems.add(CalendarItem(
             date: dateTimeIndex,
-            calendarTodoItem: calendarTodoMap[dateTimeIndex.toIso8601String().split("T")[0]] ??
-                CalendarTodoItem(userTodoCompletions: [], unassignedTodoCompletion: TodoCompletion())));
+            calendarTodoItem: calendarTodoMap[
+                    dateTimeIndex.toIso8601String().split("T")[0]] ??
+                CalendarTodoItem(
+                    userTodoCompletions: [],
+                    unassignedTodoCompletion: TodoCompletion())));
         dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
       }
       calendarItems.add(weekItems);
@@ -77,7 +83,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
     on<SelectDayEvent>((event, emit) {
       DateTime newDateTime = state.datetime.copyWith(
-        day: event.day,
+        day: event.date.day,
+        month: event.date.month,
       );
       emit(CalendarState(newDateTime, state.calendarGroup));
     });

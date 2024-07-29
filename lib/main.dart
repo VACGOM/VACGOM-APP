@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
               if (state.isLoading) return;
               if (state.isAuthenticated) {
                 if (state.user.role == "ROLE_USER")
-                  routeBloc.add(Navigate("/onboarding"));
+                  routeBloc.add(Navigate("/home"));
                 else
                   routeBloc.add(Navigate("/onboarding"));
               } else {

@@ -36,7 +36,7 @@ class ScaffoldWith extends StatelessWidget {
                 right: false,
                 child: Flex(
                   direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     NavItem(
                         title: "홈",

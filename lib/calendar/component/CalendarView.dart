@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vacgom_app/calendar/component/MultiCalendarIcon.dart';
 import 'package:vacgom_app/calendar/model/CalendarGroup.dart';
+
+import '../bloc/calendar_bloc.dart';
 
 class CalendarView extends StatelessWidget {
   final CalendarGroup calendarGroup;
@@ -20,7 +23,13 @@ class CalendarView extends StatelessWidget {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: week.map((e) {
-                return MultiCalendarIcon(item: e);
+                return GestureDetector(
+                    onTap: () {
+                      context
+                          .read<CalendarBloc>()
+                          .add(SelectDayEvent(date: e.date));
+                    },
+                    child: MultiCalendarIcon(item: e));
               }).toList()),
         );
       }).toList()),

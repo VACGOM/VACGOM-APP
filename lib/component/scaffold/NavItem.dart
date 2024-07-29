@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,21 +23,21 @@ class NavItem extends StatelessWidget {
     bool isSelected = navigationShell.currentIndex == index;
     return GestureDetector(
       child: Container(
-          width: 55,
+          width: 74.w,
           alignment: Alignment.center,
           child: Column(
             children: [
               SvgPicture.asset(
                 isSelected ? iconSelected : iconUnselected,
-                width: 25,
+                width: 24.w,
               ),
               SizedBox(
-                height: 5,
+                height: 6.h,
               ),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12.sp,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w500,
                   color: isSelected ? Color(0xFF4196FD) : Color(0xFFB0B8C1),
