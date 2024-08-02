@@ -23,6 +23,9 @@ class NavItem extends StatelessWidget {
     bool isSelected = navigationShell.currentIndex == index;
     return GestureDetector(
       child: Container(
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+          ),
           width: 74.w,
           alignment: Alignment.center,
           child: Column(
@@ -46,7 +49,7 @@ class NavItem extends StatelessWidget {
             ],
           )),
       onTap: () {
-        navigationShell.goBranch(index);
+        navigationShell.goBranch(index, initialLocation: true);
       },
     );
   }

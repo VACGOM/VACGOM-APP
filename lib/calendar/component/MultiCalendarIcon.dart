@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vacgom_app/calendar/component/CalendarIcon.dart';
 import 'package:vacgom_app/calendar/component/DefaultCalendarIcon.dart';
 import 'package:vacgom_app/calendar/component/TodoCalendarIcon.dart';
-import 'package:vacgom_app/calendar/model/CalendarItem.dart';
 
 import '../bloc/calendar_bloc.dart';
 
 class MultiCalendarIcon extends CalendarIcon {
-  final CalendarItem item;
+  MultiCalendarIcon({required super.item, required super.isSelected});
 
   bool isToday() {
     DateTime now = DateTime.now();
@@ -18,12 +17,10 @@ class MultiCalendarIcon extends CalendarIcon {
         now.day == item.date.day;
   }
 
-  MultiCalendarIcon({required this.item}) : super(item: item);
-
   @override
   Widget build(BuildContext context) {
     bool isSelected = item.date == context.read<CalendarBloc>().state.datetime;
-    Widget icon = item.calendarTodoItem.leftTodoCount > 0
+    Widget icon = item.todoItems.isNotEmpty
         ? TodoCalendarIcon(item: item)
         : DefaultCalendarIcon(item: item);
     return Container(
@@ -41,10 +38,10 @@ class MultiCalendarIcon extends CalendarIcon {
               height: 24.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isToday()
-                    ? Color(0xFF333D4B)
+                color: isToday() && !isSelected
+                    ? Color(0xFFF2F4F6)
                     : isSelected
-                        ? Color(0xFFF2F4F6)
+                        ? Color(0xFF333D4B)
                         : Colors.transparent,
                 borderRadius: BorderRadius.circular(60.r),
               ),
@@ -52,7 +49,7 @@ class MultiCalendarIcon extends CalendarIcon {
                 item.date.day.toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: isToday() ? Colors.white : Color(0xFF4E5968),
+                  color: isSelected ? Colors.white : Color(0xFF4E5968),
                   fontSize: 12.sp,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,

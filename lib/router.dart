@@ -9,7 +9,6 @@ import 'package:vacgom_app/route/route_bloc.dart';
 import 'package:vacgom_app/scaffold.dart';
 import 'package:vacgom_app/webview/page/Webview.dart';
 import 'package:vacgom_app/webview/page/home.dart';
-import 'package:vacgom_app/webview/page/home2.dart';
 
 // GoRouter configuration
 
@@ -69,8 +68,30 @@ GoRouter router(RouteBloc routeBloc) {
             ]),
             StatefulShellBranch(routes: [
               GoRoute(
-                path: "/webview",
-                builder: (context, state) => CalendarPage(),
+                path: "/webview2",
+                builder: (context, state) => Webview(
+                    url: "https://2024-jeju-vacgom-fe.vercel.app/map",
+                    isBlueStatusBar: false,
+                    showBottomBar: false),
+              ),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: "/webview3",
+                builder: (context, state) => Webview(
+                  url:
+                      "https://2024-jeju-vacgom-fe.vercel.app/vachistory/vaccine",
+                  isBlueStatusBar: false,
+                ),
+              ),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: "/webview4",
+                builder: (context, state) => Webview(
+                  url: "https://2024-jeju-vacgom-fe.vercel.app/my",
+                  isBlueStatusBar: false,
+                ),
               ),
             ])
           ],

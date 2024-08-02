@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:vacgom_app/calendar/model/CalendarItem.dart';
+import 'package:vacgom_app/calendar/model/VacgomTodoDay.dart';
 
 abstract class CalendarIcon extends StatelessWidget {
-  final CalendarItem item;
+  final VacgomTodoDay item;
+  final bool isSelected;
 
-  CalendarIcon({required this.item});
+  CalendarIcon({required this.item, this.isSelected = false});
 }

@@ -5,9 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:vacgom_app/auth/auth_bloc.dart';
 import 'package:vacgom_app/auth/repository/TokenRepository.dart';
+import 'package:vacgom_app/webview/ipc/handler/getLocation.dart';
+import 'package:vacgom_app/webview/ipc/handler/goHome.dart';
 import 'package:vacgom_app/webview/ipc/handler/nickname.dart';
+import 'package:vacgom_app/webview/ipc/handler/quit.dart';
 import 'package:vacgom_app/webview/ipc/handler/setblue.dart';
 import 'package:vacgom_app/webview/ipc/handler/token.dart';
 import 'package:vacgom_app/webview/ipc/message/Message.dart';
@@ -16,11 +18,20 @@ import 'package:vacgom_app/webview/statusbar/statusbar_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../ipc/handler/back.dart';
+import '../ipc/handler/logout.dart';
 
 class Webview extends StatefulWidget {
-  Webview({Key? key}) : super(key: key);
+  Webview(
+      {Key? key,
+      this.url = null,
+      this.isBlueStatusBar = false,
+      this.showBottomBar = false})
+      : super(key: key);
 
+  String? url;
   int progress = 0;
+  bool isBlueStatusBar = false;
+  bool showBottomBar = false;
 
   @override
   State<StatefulWidget> createState() {
@@ -32,9 +43,8 @@ class WebviewState extends State<Webview> {
   final WebViewController _controller = WebViewController();
   final BehaviorSubject<Message> inputStream = BehaviorSubject<Message>();
 
-  bool isBlueStatusBar = false;
-  bool showBottomBar = false;
   bool isLoading = true;
+  bool showBottomBar = false;
 
   @override
   void initState() {
@@ -42,27 +52,28 @@ class WebviewState extends State<Webview> {
 
     _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setOnJavaScriptAlertDialog((request) async {
-        print(request);
-        return null;
-      })
-      ..setOnConsoleMessage((message) {
-        print(message.message);
-      })
       ..addJavaScriptChannel("flutter", onMessageReceived: _handleMessage)
+      ..enableZoom(false)
       ..setNavigationDelegate(NavigationDelegate(
+        onNavigationRequest: (request) {
+          print(request.url);
+          return NavigationDecision.navigate;
+        },
         onProgress: (progress) {
-          setState(() {
-            widget.progress = progress;
-            if (progress == 100) {
-              isLoading = false;
-            }
-          });
+          if (mounted)
+            return setState(() {
+              widget.progress = progress;
+              if (progress == 100) {
+                isLoading = false;
+              }
+            });
         },
         onPageStarted: (url) {
-          setState(() {
-            isLoading = true;
-          });
+          if (mounted)
+            return setState(() {
+              isLoading = true;
+              showBottomBar = this.showBottomBar;
+            });
         },
       ));
 
@@ -70,11 +81,19 @@ class WebviewState extends State<Webview> {
     NicknameHandler(FlutterSecureStorage()).register(inputStream);
     BackHandler(context).register(inputStream);
     SetBlueHandler(context).register(inputStream);
-
+    GoHomeHandler(context).register(inputStream);
+    GetLocationHandler(context).register(inputStream);
+    LogoutHandler(context).register(inputStream);
+    QuitHandler(context).register(inputStream);
     final state = context.read<WebViewRouteBloc>().state;
-    isBlueStatusBar = state.isBlueStatusBar;
-    _controller.loadRequest(Uri.parse(state.url));
-    showBottomBar = state.showBottomBar;
+
+    if (this.widget.url != null) {
+      _controller.loadRequest(Uri.parse(this.widget.url!));
+    } else {
+      _controller.loadRequest(Uri.parse(state.url));
+    }
+
+    widget.showBottomBar = state.showBottomBar;
   }
 
   void _sendMessage(String message) {
@@ -99,52 +118,47 @@ class WebviewState extends State<Webview> {
 
   @override
   Widget build(BuildContext context) {
+    print(this.showBottomBar);
     return MultiBlocListener(
       listeners: [
         BlocListener<WebViewRouteBloc, WebViewRouteState>(
           listener: (context, state) async {
             print("Received state: $state");
-            setState(() {
-              isLoading = true;
-              isBlueStatusBar = state.isBlueStatusBar;
-              showBottomBar = state.showBottomBar;
-            });
+            if (mounted)
+              return setState(() {
+                isLoading = true;
+                widget.isBlueStatusBar = state.isBlueStatusBar;
+                showBottomBar = state.showBottomBar;
+              });
             _controller.loadRequest(Uri.parse(state.url));
           },
         ),
         BlocListener<WebViewRouteBloc, WebViewRouteState>(
           listener: (context, state) async {
             print("Received state: $state");
-            setState(() {
-              isLoading = true;
-              isBlueStatusBar = state.isBlueStatusBar;
-              showBottomBar = state.showBottomBar;
-            });
+            if (mounted)
+              return setState(() {
+                isLoading = true;
+                widget.isBlueStatusBar = state.isBlueStatusBar;
+                showBottomBar = state.showBottomBar;
+              });
             _controller.loadRequest(Uri.parse(state.url));
           },
         ),
         BlocListener<StatusbarBloc, StatusbarState>(listener: (context, state) {
-          setState(() {
-            isBlueStatusBar = state.isBlueStatusBar;
-          });
+          if (mounted)
+            return setState(() {
+              widget.isBlueStatusBar = state.isBlueStatusBar;
+            });
         })
       ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: isBlueStatusBar
+        value: widget.isBlueStatusBar
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark,
         child: Scaffold(
-            backgroundColor: isBlueStatusBar ? Color(0xff4196FD) : Colors.white,
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Color(0xff4196FD),
-              child: Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                context.read<AuthBloc>().add(LogoutRequested());
-              },
-            ),
+            backgroundColor:
+                widget.isBlueStatusBar ? Color(0xff4196FD) : Colors.white,
             body: SafeArea(
               bottom: showBottomBar,
               child: Stack(
@@ -152,17 +166,6 @@ class WebviewState extends State<Webview> {
                   WebViewWidget(
                     controller: _controller,
                   ),
-                  if (isLoading)
-                    Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                          color: isBlueStatusBar
-                              ? Color(0xff4196FD)
-                              : Colors.white),
-                      child: Container(),
-                    )
                 ],
               ),
             )),

@@ -6,6 +6,8 @@ import 'package:vacgom_app/component/scaffold/NavItem.dart';
 class ScaffoldWith extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   ScaffoldWith({required this.navigationShell}) {}
 
   @override
@@ -13,6 +15,7 @@ class ScaffoldWith extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
+        key: navigatorKey,
         backgroundColor: Color(0xFFF9FAFB),
         body: Flex(
           direction: Axis.vertical,
@@ -48,10 +51,8 @@ class ScaffoldWith extends StatelessWidget {
                         navigationShell: navigationShell),
                     NavItem(
                         title: "달력",
-                        iconSelected:
-                            "resources/assets/ico/ico-nav-home-selec.svg",
-                        iconUnselected:
-                            "resources/assets/ico/ico-nav-home-unselec.svg",
+                        iconSelected: "resources/assets/ico/calendar-en.svg",
+                        iconUnselected: "resources/assets/ico/calendar.svg",
                         index: 2,
                         navigationShell: navigationShell),
                     NavItem(

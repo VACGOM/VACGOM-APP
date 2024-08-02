@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vacgom_app/auth/auth_bloc.dart';
 
 import '../message/Message.dart';
 
@@ -15,7 +18,22 @@ class BackHandler {
   }
 
   Future<void> handle(Message message) async {
-    Navigator.of(context).pop();
+    if (!GoRouter.of(context).canPop()) {
+      final user = context.read<AuthBloc>().state.user;
+      if (context.read<AuthBloc>().state.isAuthenticated) {
+        if (user!.role == "ROLE_TEMP_USER") {
+          GoRouter.of(context).go("/onboarding");
+        } else {
+          GoRouter.of(context).go("/home");
+        }
+      } else {
+        GoRouter.of(context).go("/login");
+      }
+
+      message.resolve(null);
+    }
+
+    GoRouter.of(context).pop();
     message.resolve(null);
   }
 }

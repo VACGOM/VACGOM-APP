@@ -2,28 +2,46 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 
-enum Role { admin, user }
+import 'PartnerUser.dart';
 
 class User extends Equatable {
   final int id;
   final String role;
-  final String name;
+  final String? name;
+  final String? babyName;
   final String profileImageUrl;
   final String color;
+  final bool isMaster;
+  final PartnerUser? partnerUser;
 
   User(
       {required this.id,
       required this.role,
       required this.name,
+      required this.babyName,
       required this.profileImageUrl,
-      required this.color});
+      required this.color,
+      required this.isMaster,
+      required this.partnerUser});
 
   static User empty() {
-    return User(id: -1, role: "", name: "", profileImageUrl: "", color: "");
+    return User(
+        id: -1,
+        role: "",
+        name: "",
+        babyName: "",
+        profileImageUrl: "",
+        color: "",
+        isMaster: false,
+        partnerUser: null);
   }
 
   Color getColor() {
-    return Color(int.parse(this.color.substring(1, 7), radix: 16) + 0xFF000000);
+    if (isMaster) {
+      return Color(0xFF4196FD);
+    } else {
+      return Color(0xFF85D27F);
+    }
   }
 
   @override

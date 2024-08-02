@@ -12,6 +12,7 @@ class TokenRepository {
   }
 
   Future<String?> getToken() {
+    print(_storage.read(key: "jwt"));
     return _storage.read(key: "jwt");
   }
 

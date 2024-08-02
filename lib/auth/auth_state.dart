@@ -3,20 +3,20 @@ part of 'auth_bloc.dart';
 class AuthState extends Equatable {
   bool isAuthenticated;
   bool isLoading;
-  User user;
+  User? user;
 
   AuthState(this.isAuthenticated, this.isLoading, this.user);
 
   static AuthState initial() {
-    return AuthState(false, false, User.empty());
+    return AuthState(false, false, null);
   }
 
   static AuthState loading() {
-    return AuthState(false, true, User.empty());
+    return AuthState(false, true, null);
   }
 
   static AuthState unauthenticated() {
-    return AuthState(false, false, User.empty());
+    return AuthState(false, false, null);
   }
 
   static AuthState authenticated(User user) {

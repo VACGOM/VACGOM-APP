@@ -12,3 +12,7 @@ final class AuthTokenChanged extends AuthEvent {
 }
 
 final class LogoutRequested extends AuthEvent {}
+
+final class AuthStateChanged extends AuthEvent {}
+
+final class OnBoardingCompleted extends AuthEvent {}

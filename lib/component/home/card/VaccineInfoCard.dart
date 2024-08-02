@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vacgom_app/webview/page/main/main_bloc.dart';
 
 class VaccineInfoCard extends StatelessWidget {
   @override
@@ -36,27 +38,31 @@ class VaccineInfoCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 3.h),
-                Row(
-                  children: [
-                    Text(
-                      '1개',
-                      style: TextStyle(
-                        color: Color(0xFF333D4B),
-                        fontSize: 18.sp,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      ' / 3개',
-                      style: TextStyle(
-                        color: Color(0xFFB0B8C1),
-                        fontSize: 16.sp,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
+                BlocBuilder<MainBloc, MainState>(
+                  builder: (context, state) {
+                    return Row(
+                      children: [
+                        Text(
+                          '${state.mainModel?.inoculated}개',
+                          style: TextStyle(
+                            color: Color(0xFF333D4B),
+                            fontSize: 18.sp,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          ' / ${state.mainModel?.required}개',
+                          style: TextStyle(
+                            color: Color(0xFFB0B8C1),
+                            fontSize: 16.sp,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )
+                      ],
+                    );
+                  },
                 )
               ],
             ),

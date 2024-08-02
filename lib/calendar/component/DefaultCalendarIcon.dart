@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vacgom_app/calendar/component/CalendarIcon.dart';
-import 'package:vacgom_app/calendar/model/CalendarItem.dart';
 
 class DefaultCalendarIcon extends CalendarIcon {
-  final CalendarItem item;
-
-  DefaultCalendarIcon({required this.item}) : super(item: item);
+  DefaultCalendarIcon({required super.item});
 
   @override
   Widget build(BuildContext context) {

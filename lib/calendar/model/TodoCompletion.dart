@@ -1,11 +1,9 @@
-import '../../auth/model/User.dart';
-import 'TodoItem.dart';
-
 class TodoCompletion {
-  User? user;
-  List<TodoItem> todoItems = [];
+  int userId;
   double completionRate;
 
-  TodoCompletion(
-      {this.user, this.todoItems = const [], this.completionRate = 0.0});
+  TodoCompletion({
+    required this.userId,
+    required this.completionRate,
+  });
 }

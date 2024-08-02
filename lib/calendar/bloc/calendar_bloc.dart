@@ -1,92 +1,111 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:vacgom_app/calendar/model/CalendarTodoItem.dart';
-import 'package:vacgom_app/calendar/model/TodoCompletion.dart';
-import 'package:vacgom_app/calendar/service/CalendarService.dart';
 
+import '../../api/api.dart';
+import '../../auth/model/User.dart';
 import '../model/CalendarGroup.dart';
-import '../model/CalendarItem.dart';
+import '../model/VacgomTodoItem.dart';
+import '../model/VacgomTodoMap.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
-  Future<CalendarGroup> generate(DateTime dateTime) async {
-    CalendarService calendarService = CalendarService();
-    Map<String, CalendarTodoItem> calendarTodoMap =
-        await calendarService.searchTodo(dateTime.year, dateTime.month);
+  final RestClient restClient;
 
-    print(calendarTodoMap);
-    List<List<CalendarItem>> calendarItems = [];
-
-    int dayOfWeek = (dateTime.weekday % 7);
-    int prevMonthDays = dayOfWeek;
-
-    List<CalendarItem> prevMonthItems = [];
-    DateTime dateTimeIndex = dateTime.subtract(Duration(days: prevMonthDays));
-    //이전 달의 날짜들
-    for (int i = 0; i < prevMonthDays; i++) {
-      prevMonthItems.add(CalendarItem(
-          date: dateTimeIndex,
-          calendarTodoItem: CalendarTodoItem(
-              userTodoCompletions: [],
-              unassignedTodoCompletion: TodoCompletion())));
-      dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
-    }
-
-    //이번 달인데 첫번째 주
-    for (int i = 0; i < 7 - prevMonthDays; i++) {
-      prevMonthItems.add(CalendarItem(
-          date: dateTimeIndex,
-          calendarTodoItem: CalendarTodoItem(
-              userTodoCompletions: [],
-              unassignedTodoCompletion: TodoCompletion())));
-      dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
-    }
-
-    calendarItems.add(prevMonthItems);
-
-    for (int i = 0; i < 4; i++) {
-      List<CalendarItem> weekItems = [];
-      for (int j = 0; j < 7; j++) {
-        print(dateTimeIndex.toIso8601String().split("T")[0]);
-        weekItems.add(CalendarItem(
-            date: dateTimeIndex,
-            calendarTodoItem: calendarTodoMap[
-                    dateTimeIndex.toIso8601String().split("T")[0]] ??
-                CalendarTodoItem(
-                    userTodoCompletions: [],
-                    unassignedTodoCompletion: TodoCompletion())));
-        dateTimeIndex = dateTimeIndex.add(Duration(days: 1));
-      }
-      calendarItems.add(weekItems);
-    }
-
-    print(calendarItems);
-
-    return CalendarGroup(calendarItems: calendarItems);
-  }
-
-  CalendarBloc() : super(CalendarInitial()) {
+  CalendarBloc(this.restClient) : super(CalendarInitial()) {
     on<InitEvent>((event, emit) async {
       print("InitEvent");
-      emit(CalendarState(
-          DateTime.now(), await generate(DateTime.now().copyWith(day: 1))));
+
+      final todo = await this.restClient.getTodo();
+      print(todo);
+      Map<int, VacgomTodoItem> todoItems = {};
+
+      todo.data.forEach((element) {
+        element.todoList.forEach((element) {
+          todoItems[element.todoId] = VacgomTodoItem(
+            todoId: element.todoId,
+            title: element.title,
+            date: element.date,
+            isDone: element.isDone,
+            memberId: element.memberId,
+          );
+        });
+      });
+
+      emit(CalendarState(DateTime.now(), CalendarGroup.create(DateTime.now()),
+          VacgomTodoMap(todoItems: todoItems)));
     });
 
     on<ChangeMonthEvent>((event, emit) async {
       DateTime newDateTime = state.datetime
           .copyWith(month: state.datetime.month + event.move, day: 1);
 
-      emit(CalendarState(newDateTime, await generate(newDateTime)));
+      emit(CalendarState(
+          newDateTime, CalendarGroup.create(newDateTime), state.todoMap));
     });
 
     on<SelectDayEvent>((event, emit) {
-      DateTime newDateTime = state.datetime.copyWith(
-        day: event.date.day,
-        month: event.date.month,
-      );
-      emit(CalendarState(newDateTime, state.calendarGroup));
+      if (event.isPrev) {
+        DateTime newDateTime = state.datetime.copyWith(
+          day: event.date.day,
+          month: event.date.month,
+        );
+
+        emit(CalendarState(
+            newDateTime, CalendarGroup.create(newDateTime), state.todoMap));
+      } else if (event.isNext) {
+        DateTime newDateTime = state.datetime.copyWith(
+          day: event.date.day,
+          month: event.date.month,
+        );
+
+        emit(CalendarState(
+            newDateTime, CalendarGroup.create(newDateTime), state.todoMap));
+      } else {
+        DateTime newDateTime = state.datetime.copyWith(
+          day: event.date.day,
+          month: event.date.month,
+        );
+
+        emit(CalendarState(newDateTime, state.calendarGroup, state.todoMap));
+      }
+    });
+
+    on<MarkUndoneEvent>((event, emit) {
+      print("MarkUndoneEvent");
+      print(event.todoItem);
+
+      event.todoItem.isDone = false;
+      event.todoItem.memberId = null;
+
+      emit(CalendarState(state.datetime, state.calendarGroup, state.todoMap));
+    });
+
+    on<MarkDoneEvent>((event, emit) {
+      print("MarkDoneEvent");
+      print(event.todoItem);
+
+      event.todoItem.isDone = true;
+      event.todoItem.memberId = event.user.id;
+
+      emit(CalendarState(state.datetime, state.calendarGroup, state.todoMap));
+    });
+
+    on<TodoAddedEvent>((event, emit) {
+      print("TodoAddedEvent");
+      print(event.todo);
+
+      final todo = VacgomTodoItem(
+          todoId: state.todoMap.todoItems.length + 1,
+          title: event.todo,
+          date: state.datetime,
+          isDone: false,
+          memberId: null);
+
+      state.todoMap.todoItems[todo.todoId] = todo;
+
+      emit(CalendarState(state.datetime, state.calendarGroup, state.todoMap));
     });
   }
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:vacgom_app/auth/auth_bloc.dart';
 
 class ChildProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 15.w),
+      padding:
+          EdgeInsets.only(left: 20.h, top: 15.w, bottom: 15.w, right: 50.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -21,9 +25,13 @@ class ChildProfileCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Container(
-              child: Image.asset(
-                "resources/assets/image/baby.png",
-                width: 60.w,
+              width: 60.w,
+              height: 60.h,
+              alignment: Alignment.center,
+              color: Color(0xFFF2F4F6),
+              child: SvgPicture.asset(
+                "resources/assets/ico/Group.svg",
+                width: 33.3.w,
               ),
             ),
           ),
@@ -34,7 +42,7 @@ class ChildProfileCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '김민지',
+                    context.read<AuthBloc>().state.user?.babyName ?? '아기',
                     style: TextStyle(
                       color: Color(0xFF333D4B),
                       fontSize: 20.sp,

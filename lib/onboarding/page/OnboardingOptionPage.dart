@@ -59,10 +59,11 @@ class OnboardingOptionPage extends StatelessWidget {
                       isPrimary: true,
                       onPressed: () {
                         context.read<WebViewRouteBloc>().add(WebviewNavigate(
-                            url: "http://localhost:3000/signup",
+                            url:
+                                "https://2024-jeju-vacgom-fe.vercel.app/signup",
                             isBlueStatusBar: false,
                             showBottomBar: false,
-                            isReplace: false));
+                            isReplace: true));
                       }),
                   SizedBox(
                     height: 10.h,
