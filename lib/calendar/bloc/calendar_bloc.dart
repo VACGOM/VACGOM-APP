@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:vacgom_app/api/dto/todo/CreateTodo.dart';
 
 import '../../api/api.dart';
 import '../../auth/model/User.dart';
@@ -89,6 +90,9 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       event.todoItem.isDone = true;
       event.todoItem.memberId = event.user.id;
 
+      print(
+          "${event.todoItem.todoId} ${event.todoItem.isDone} ${event.user.id}");
+
       emit(CalendarState(state.datetime, state.calendarGroup, state.todoMap));
     });
 
@@ -105,6 +109,10 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
       state.todoMap.todoItems[todo.todoId] = todo;
 
+      print(state.datetime.toIso8601String().split("T")[0]);
+      restClient.addTodo(CreateTodo(
+          title: event.todo,
+          date: state.datetime.toIso8601String().split("T")[0]));
       emit(CalendarState(state.datetime, state.calendarGroup, state.todoMap));
     });
   }

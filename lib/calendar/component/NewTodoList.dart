@@ -9,7 +9,6 @@ import 'package:vacgom_app/calendar/component/TodoButton.dart';
 import 'package:vacgom_app/calendar/component/TodoItemElement.dart';
 import 'package:vacgom_app/component/Input.dart';
 
-import '../../scaffold.dart';
 import '../model/VacgomTodoItem.dart';
 
 class NewTodoList extends StatelessWidget {
@@ -68,21 +67,16 @@ class NewTodoList extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
-                      context:
-                          ScaffoldWith.navigatorKey.currentContext ?? context,
+                      context: context,
                       builder: (context) {
-                        return Container(
-                          color: Colors.transparent,
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.w, vertical: 30.h),
+                        return SafeArea(
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20)),
                             width: double.infinity,
                             padding: EdgeInsets.only(top: 20.w),
-                            child: Wrap(
+                            child: Column(
                               children: [
                                 Center(
                                   child: Container(

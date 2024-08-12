@@ -4,6 +4,8 @@ import 'package:vacgom_app/api/dto/auth/AuthDto.dart';
 import 'package:vacgom_app/api/dto/auth/TokenResponse.dart';
 import 'package:vacgom_app/api/dto/baby/BabyResponse.dart';
 import 'package:vacgom_app/api/dto/main/MainResponse.dart';
+import 'package:vacgom_app/api/dto/todo/CreateTodo.dart';
+import 'package:vacgom_app/api/dto/todo/UpdateTodo.dart';
 
 import '../constants.dart';
 import 'dto/BaseResponse.dart';
@@ -34,7 +36,17 @@ abstract class RestClient {
   @GET("${BASE_URL_V2}/api/v2/calender/todo")
   Future<BaseResponse<List<DateTodoDto>>> getTodo();
 
+  @POST("${BASE_URL_V2}/api/v2/calender/todo")
+  Future<void> addTodo(@Body() CreateTodo createTodo);
+
+  @PATCH("${BASE_URL_V2}/api/v2/calender/todo/")
+  Future<void> updateTodo(@Body() UpdateTodo createTodo);
+
   @POST("${BASE_URL_V2}/api/v2/oauth/KAKAO/login")
   Future<BaseResponse<LoginResponseDto>> login(
+      @Body() LoginRequestDto loginRequestDto);
+
+  @POST("${BASE_URL_V2}/api/v2/oauth/APPLE/login")
+  Future<BaseResponse<LoginResponseDto>> loginApple(
       @Body() LoginRequestDto loginRequestDto);
 }

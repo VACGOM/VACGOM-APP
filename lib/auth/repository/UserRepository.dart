@@ -24,6 +24,7 @@ class UserRepository {
         name: dto.data.name,
         babyName: dto.data.babyName,
         profileImageUrl: "",
+        sex: "M",
         color: "#FF0000",
         isMaster: false,
         partnerUser: null);

@@ -115,7 +115,7 @@ class CalendarPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

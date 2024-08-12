@@ -6,3 +6,7 @@ sealed class LoginEvent {}
 class KakaoLoginButtonPressedEvent extends LoginEvent {
   KakaoLoginButtonPressedEvent();
 }
+
+class AppleLoginButtonPressedEvent extends LoginEvent {
+  AppleLoginButtonPressedEvent();
+}

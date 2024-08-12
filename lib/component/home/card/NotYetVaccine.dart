@@ -7,6 +7,23 @@ import 'package:vacgom_app/webview/page/main/main_bloc.dart';
 import 'package:vacgom_app/webview/route/route_bloc.dart';
 
 class NotYetVaccine extends StatelessWidget {
+  final Map<int, String> map = {
+    2: "2",
+    3: "3",
+    5: "6",
+    6: "7",
+    7: "9",
+    8: "10",
+    9: "12",
+    10: "15",
+    13: "11",
+    15: "14",
+    18: "3",
+    19: "3",
+    20: "9",
+    21: "9"
+  };
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainBloc, MainState>(
@@ -96,7 +113,7 @@ class NotYetVaccine extends StatelessWidget {
                             onTap: () {
                               context.read<WebViewRouteBloc>().add(WebviewNavigate(
                                   url:
-                                      "https://2024-jeju-vacgom-fe.vercel.app/detailvac/${state.mainModel?.vaccinationId}",
+                                      "https://2024-jeju-vacgom-fe.vercel.app/detailvac/${map[state.mainModel?.vaccinationId]}",
                                   isBlueStatusBar: false,
                                   showBottomBar: true,
                                   isReplace: false));

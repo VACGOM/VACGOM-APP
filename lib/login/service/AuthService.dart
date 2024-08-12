@@ -15,4 +15,12 @@ class AuthService {
 
     return AuthToken(response.data.token.accessToken);
   }
+
+  Future<AuthToken> appleLogin(String authorizationCode) async {
+    RestClient restClient = RestClient(Dio());
+    BaseResponse<LoginResponseDto> response = await restClient.loginApple(
+        LoginRequestDto(accessToken: authorizationCode, refreshToken: null));
+
+    return AuthToken(response.data.token.accessToken);
+  }
 }

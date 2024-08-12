@@ -12,6 +12,7 @@ class User extends Equatable {
   final String profileImageUrl;
   final String color;
   final bool isMaster;
+  final String sex;
   final PartnerUser? partnerUser;
 
   User(
@@ -22,6 +23,7 @@ class User extends Equatable {
       required this.profileImageUrl,
       required this.color,
       required this.isMaster,
+      required this.sex,
       required this.partnerUser});
 
   static User empty() {
@@ -33,6 +35,7 @@ class User extends Equatable {
         profileImageUrl: "",
         color: "",
         isMaster: false,
+        sex: "M",
         partnerUser: null);
   }
 

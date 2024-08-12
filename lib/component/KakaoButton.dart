@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class KakaoButton extends StatelessWidget {
@@ -12,8 +13,8 @@ class KakaoButton extends StatelessWidget {
       pressedOpacity: 0.9,
       onPressed: onPressed,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        margin: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
         decoration: ShapeDecoration(
           color: Color(0xFFFBE400),
           shape: RoundedRectangleBorder(

@@ -48,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                   id: int.parse(user["sub"]),
                   role: user["role"],
                   name: user1.name,
+                  sex: baby.data.sex,
                   babyName: user1.babyName,
                   profileImageUrl:
                       "https://avatars.githubusercontent.com/u/77490557?v=4",
@@ -69,6 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                   profileImageUrl:
                       "https://avatars.githubusercontent.com/u/77490557?v=4",
                   color: "#4196FD",
+                  sex: "M",
                   isMaster: false,
                   partnerUser: null)));
             }
@@ -78,6 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               role: user["role"],
               name: user1.name,
               babyName: user1.babyName,
+              sex: "M",
               profileImageUrl:
                   "https://avatars.githubusercontent.com/u/77490557?v=4",
               color: "#4196FD",
@@ -112,6 +115,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               profileImageUrl:
                   "https://avatars.githubusercontent.com/u/77490557?v=4",
               color: "#4196FD",
+              sex: baby.data.sex,
               isMaster: baby.data.masterStatus,
               partnerUser: baby.data.partner != null
                   ? PartnerUser(
@@ -130,12 +134,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                   "https://avatars.githubusercontent.com/u/77490557?v=4",
               color: "#4196FD",
               isMaster: false,
+              sex: "M",
               partnerUser: null)));
         }
       } else {
         emit(AuthState.authenticated(User(
           id: int.parse(user["sub"]),
           role: user["role"],
+          sex: "M",
           name: user1.name,
           babyName: user1.babyName,
           profileImageUrl:
@@ -178,6 +184,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               profileImageUrl:
                   "https://avatars.githubusercontent.com/u/77490557?v=4",
               color: "#4196FD",
+              sex: baby.data.sex,
               isMaster: baby.data.masterStatus,
               partnerUser: baby.data.partner != null
                   ? PartnerUser(
@@ -191,6 +198,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               id: int.parse(user["sub"]),
               role: user["role"],
               name: user1.name,
+              sex: "M",
               babyName: user1.babyName,
               profileImageUrl:
                   "https://avatars.githubusercontent.com/u/77490557?v=4",
@@ -207,6 +215,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           profileImageUrl:
               "https://avatars.githubusercontent.com/u/77490557?v=4",
           color: "#4196FD",
+          sex: "M",
           isMaster: false,
           partnerUser: null,
         )));
@@ -231,6 +240,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 role: user["role"],
                 name: user1.name,
                 babyName: user1.babyName,
+                sex: baby.data.sex,
                 profileImageUrl:
                     "https://avatars.githubusercontent.com/u/77490557?v=4",
                 color: "#4196FD",
@@ -246,6 +256,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(AuthState.authenticated(User(
                 id: int.parse(user["sub"]),
                 role: user["role"],
+                sex: user1.sex,
                 name: user1.name,
                 babyName: user1.babyName,
                 profileImageUrl:
@@ -256,6 +267,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         } else {
           emit(AuthState.authenticated(User(
+            sex: "M",
             id: int.parse(user["sub"]),
             role: user["role"],
             name: user1.name,

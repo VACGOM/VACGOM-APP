@@ -24,7 +24,7 @@ class CalendarMonthIndicator extends StatelessWidget {
         children: [
           GestureDetector(
             child: SvgPicture.asset(
-              "resources/assets/ico/ico-arrow-left.svg",
+              "resources/assets/ico/chevron-left.svg",
               width: 20.w,
             ),
             onTap: onPrevMonth,
@@ -42,7 +42,7 @@ class CalendarMonthIndicator extends StatelessWidget {
           SizedBox(width: 8.w),
           GestureDetector(
             child: SvgPicture.asset(
-              "resources/assets/ico/ico-arrow-left.svg",
+              "resources/assets/ico/chevron-right.svg",
               width: 20.w,
             ),
             onTap: onNextMonth,

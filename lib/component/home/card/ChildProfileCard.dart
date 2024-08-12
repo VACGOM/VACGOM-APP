@@ -51,26 +51,35 @@ class ChildProfileCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 6.w),
-                  Text(
-                    '공주님',
-                    style: TextStyle(
-                      color: Color(0xFF4196FD),
-                      fontSize: 14.sp,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w600,
-                    ),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      print(state.user);
+                      return Text(
+                        state.user?.sex == "M" ? "왕자님" : "공주님",
+                        style: TextStyle(
+                          color: Color(0xFF4196FD),
+                          fontSize: 14.sp,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
                   )
                 ],
               ),
-              Text(
-                '태어난지 180일째',
-                style: TextStyle(
-                  color: Color(0xFF8B95A1),
-                  fontSize: 14.sp,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: -0.30,
-                ),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return Text(
+                    '${state.user?.name}의 아기',
+                    style: TextStyle(
+                      color: Color(0xFF8B95A1),
+                      fontSize: 14.sp,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.30,
+                    ),
+                  );
+                },
               )
             ],
           )
